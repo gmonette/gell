@@ -78,6 +78,11 @@
 #' 
 ## FUNCTIONS ####
 
+library(pracma)
+library(spida2)
+
+
+
 disp <- spida2::disp
 
 init <- function(from = -fac*c(1,1), to = fac*c(1,1), fac = 3,
@@ -107,10 +112,7 @@ red <- 'red'
     green <- 'green'
       black <- 'black'
                
-               
-#'
-library(spida2)
-library(pracma)
+
 #' Normalize homogeneous coordinates
 #' 
 #' @param x an object represented as a n x 3 numerical matrix
@@ -308,7 +310,8 @@ pl.point <- function(x,...) {
 
 # test
 init <- function(fac= 5) plot(fac*c(-1,1),fac*c(-1,1), type = 'n', asp = 1)
-
+if(F){
+  
 init()
 p(c(0,0)) %>% 
   join(p(c(1,1))) %>% pl -> line1
@@ -316,6 +319,7 @@ p(c(1,1)) %>%
   join(p(c(-1,1))) %>% pl -> line2
 line1 %>% join(line2) %>% pl(pch=16, col = 'red')
 
+}
 
 ## plus, mult ####
  
@@ -390,12 +394,15 @@ setMethod('mult', signature('numeric','line'),
           } 
 )
 
+if(F){
+  
 line2 %>% mult(2) %>% pl(col = 'red')
 mult(2, line2) %>% pl(col='blue')
 mult(-3, line2) %>% pl(col='blue')
 
 l(c(1,1,1))         
 l(c(1,1,1)) %>% mult(2) %>% pl  
+}
 
 setMethod('mult', signature('point','numeric'),
           function(x, y, ...) {
@@ -409,7 +416,7 @@ setMethod('mult', signature('numeric','point'),
           } 
 )
 
-p(c(-2,-5)) %>% pl %>% join(p(c(0,0))) %>% pl
+
 
 
 setMethod('plus', signature('line','point'),
@@ -877,7 +884,7 @@ gell_box <- function(ge, p1, p2 = p(a1$points[2,])) {
   l(rbind(l1,l2,l3,l4))
 }
 
-{
+if(F){
   init()
   l(1,1,1) %>% pl
   l(1,1,1) %>% plus(p(1,1,1))%>% pl
@@ -901,10 +908,10 @@ gell_box <- function(ge, p1, p2 = p(a1$points[2,])) {
   
   gell(X) %>% center %>% pl
   gell(X) %>% gell_box(p(1,1,0)) %>% pl
-}
-
 gell(X) %>% axes(p(-c(0,1))) %>% pl(pch = 16, col = 'red')
 gell(X) %>% axes(-c(0,1)) %>% pl(pch = 16, col = 'red')  
+}
+
   
 
 
@@ -1009,7 +1016,8 @@ inter_gell_seg <- function(ge, sg) {
 
 
 
-
+if(F){
+  
 
 X %>% pl
 init()
@@ -1042,6 +1050,7 @@ gell(X) %>% pcenter %>% pl(pch = 16, col = 'blue')
 gell(X) %>% axes(p(1,0,0)) %>% pl(pch = 16, col = 'red')
 gell_box(gell(X), p(1,0,0)) %>% pl
 gell_box(gell(X), p(1,0,0), p(0,1,0)) %>% pl
+}
 
 dual.gell <- function(gell, center = gell$center) {
   ret <- gell
@@ -1050,12 +1059,15 @@ dual.gell <- function(gell, center = gell$center) {
   ret
 }
 
+if(F){
+  
 X %>% plot(asp = 1)
 gell(X) %>% pl(col = 'red')
 
 gell(X) %>% dual %>% pl
 (center = pcenter(gell(X))[[1:2]])
 
+}
 #############  SEGMENTS  #################################
 
 ##' DO LATER ####
@@ -1116,9 +1128,12 @@ seg.gell <- function(ge, ...) {
   seg(pts)
 }
 
+if(F){
+  
 l(rbind(c(1,1,1), l(1,-1,1)))
 join(l(1,1,1), l(1,-1,1)) %>% 
   rbind(p(2,3,1)) %>% p %>%  seg
+}
 
 pl.seg <- function(x, close = FALSE, type = 'l', fill = NULL, ...) {
   # 
@@ -1256,7 +1271,7 @@ rbind(
   c(1,-1,0)
 )  %>% seg %>% close %>% rot(pi/16)%>% pl(fill = "#FF00FF22")
 
-
+}
 if(F){
   
   p(l(c(1,1,1)),l(c(2,1,1)))
@@ -1315,457 +1330,6 @@ ell(shape = .1*diag(2) + 1) %>% dual %>% pl
                
         
 
-
-
-
-
-
-init();abline(v=-10:10,col='gray50',lty=2);abline(h=-10:10,col='gray50',lty=2)
-
-#' - 
-# library(p3d)
-library(pracma)
-library(spida2)
-?ellplus
-#' Drop 3rd coordinate of 3-vector(s)
-#'
-#' @param x 3-vectors or a 2-vectors (as rows of a matrix)
-#'
-#' Drops the 3 column if there is one
-#' @export
-drop3 <- function(x) {
-  # truncate 3-vector to 2
-  x[,-3,drop=FALSE]
-}
-#' Create a classless row vector (as a matrix)
-#'
-#' r is to row as c is to column
-#' @export
-r <- function(...) {
-  # c is to column as r is to row
-  rbind(c(...))
-}
-#' Normalize 3-vector
-#'
-#' @param x a 3-vector
-#'
-#' @export
-n <- function(x) {
-  if(ncol(x) != 3) stop('can only normalize 3-vectors')
-  div <- ifelse(x[,3] == 0, 1, x[,3])
-  x/div
-}
-#' Make 3-vector
-#'
-#' Only really makes sense for points
-#'
-#' @param x a 3-vector, 2-vector or vector of length 2 or 3.
-#'
-#' @export
-to3 <- function(x, c3 = 1) {
-  x <- rbind(x)
-  if(ncol(x) == 2) cbind(x,c3)
-  else if(ncol(x) != 3) stop('rbind(x) must have 2 or 3 columns')
-  x
-}
-#' Make 2-vector
-#'
-#' Only really makes sense for finite points
-#'
-#' @param x a 3-vector, 2-vector or vector of length 2 or 3.
-#'
-#' @export
-to2 <- function(x) {
-  x <- rbind(x)
-  if(ncol(x) == 2) return(x)
-  else if(ncol(x) != 3) stop('rbind(x) must have 2 or 3 columns')
-  x[,1:2,drop=FALSE]/x[,3]
-}
-#' Dual object
-#'
-#' @param o1,o2 two lines, or two points as 3-vectors
-#'
-#' @returns the intersection of two lines or the line joining two points
-#'
-#' @examples
-#' dual(r(1,1,1), r(1,-1,1))
-#'
-#' @export
-dual <- function(o1,o2) {
-    ret <- pracma::cross(o1,o2)
-    if('ppoint' %in% class(o1)) class(ret) <- 'pline'
-    if('pline' %in% class(o1)) class(ret) <- 'ppoint'
-    n(ret)
-}
-#' Points on a line
-#'
-#' @param x a 3-vector representing a line
-#' @param len length of line, default 5
-#'
-#' Returns two points on a line as two rows of a matrix
-#' as 2-vectors
-#'
-#' @export
-topts <- function(line, len = 5) {
-  line <- rbind(line)
-  if(ncol(line) != 3) stop('line must be a 3-vector')
-  pmid <- if(line[1,3] ==0) r(0,0,1) else dual(line,r(line[1,2],-line[1,1],0))
-  pmid <- to2(pmid)
-  orth <- r(line[1,2], - line[1,1])
-  orth.len <- sqrt(sum(orth^2))
-  p1 <- (pmid) + r(line[1,2],-line[1,1]) * len/orth.len
-  p2 <- (pmid) - r(line[1,2],-line[1,1]) * len/orth.len
-   rbind(p1,p2)
-}
-#' Translate a line
-#'
-#' See ![translating a line](drawings/translating_a_line.png)
-#'
-#' @param line represented as 3-vector
-#' @param point represented as 3-vector or 2-vector
-#'
-#' @export
-plus <- function(line,point) {
-  point <- to2(point)
-  ret <- line
-  ret[,3] <- line[,3] - point[1] * line[,1] - point[2] * line[,2]
-  ret
-}
-#' Intersection of line and 0-centered ellipse
-#'
-#' ![intersecting an ellipse](drawings/intersecting_an_ellipse.png)
-#'
-inter_ell_cline <- function(ell, line) {
-  center <- attr(ell,'parms')$center %>% to2
-  shape <- attr(ell,'parms')$shape
-  radius <- attr(ell,'parms')$radius
-  alphas <- chol(shape)%*%c(line)[1:2]
-  theta <- atan2(-c(alphas)[1],c(alphas)[2])
-  ret <- radius *t(chol(shape))%*%c(cos(theta),sin(theta))
-  ret <- rbind(c(ret), -c(ret))
-  ret
-}
-Sigma <- .1*diag(2)  + .8
-ellobj <- ell(shape = Sigma)
-
-
-inter_ell_cline(ellobj, r(1,1,0))
-
-init <- function(from = -fac*c(1,1), to = fac*c(1,1), fac = 3,
-                 xlab = '', ylab = '', asp = 1) {
-  plot(rbind(from,to), type ='n', xlab = xlab, ylab = ylab, asp = asp)
-}
-
-
-init();abline(v=-10:10,col='gray50',lty=2);abline(h=-10:10,col='gray50',lty=2)
-
-ellobj %>% lines
-inter_ell_cline(ellobj, r(-1,2,0)) %>% lines
-1/topts(r(1,1,1),10) %>% lines
-topts(r(1,1,1) %>% plus(c(2,2)),10) %>% lines
-
-
-topts(r(1,1,0),10) %>% lines
-topts(r(1,0,2),10) %>% lines
-topts(r(0,0,1),10) %>% lines
-
-
-perp <- function(pline,through=r(0,0)) {
-  # finds line that is perpendicular to pline
-  # going through point through
-  through <- as.ppoint(through)
-  as.pline(pracma::cross(t(t(pline)*c(1,1,0)), through))
-}
-
-?ConjComp
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-ell_(c(1,1),shape = diag(2)+ .9 - .9*diag(2)) %>% plot(type= 'l', lwd = 2)
-ell_(c(1,1),shape = diag(2)) %>% lines(col = 'red')
-#
-# Given two points draw a line
-#
-#' General:
-#'
-#' points are 1 x 2 matrices, created maybe with rbind
-#' or 4 x 2 matrices i.e. intersection of two lines
-#' lines are 2 x 2 matrices
-#'
-pline <- function(x,...) {
-  UseMethod('pline')
-}
-pline.pline <- function(x,...) {
-  x
-}
-pline.ppoint <- function(x1, x2, ...) {
-  if(missing(x2)) {
-    if(nrow(x1) < 2) stop('Need more than one row for x1 if no value for x2')
-    x2 <- x1[-1,,drop=FALSE]
-    x1 <- x1[rep(1,nrow(x1)-1),,drop = FALSE]
-  }
-  ret <- rbind(pracma::cross(x1,x2))
-  class(ret) <- 'pline'
-  ret
-}
-pline.default <- function(x,...) {
-  # x must be an n x 2 matrix giving, usually, 2 points defining a line
-  x <- rbind(x)
-  if(ncol(x) != 2) stop('rbind(x) must have 2 columns')
-  if(nrow(x) == 1) x <- rbind(c(0,0),x)
-  ret <- cbind(x,1)
-  class(ret) <- 'ppoint'
-  pline(ret)
-}
-ppoint <- function(x,...) {
-  UseMethod('ppoint')
-}
-ppoint.pline <- function(l1, l2,...) {
-  if(missing(l2)) {
-    if(nrow(l1) < 2) stop('Need more than one row for l1 if no value for l2')
-    l2 <- l1[-1,,drop=FALSE]
-    l1 <- l1[rep(1,nrow(l1)-1),,drop = FALSE]
-  }
-  ret <- rbind(pracma::cross(l1,l2))
-  class(ret) <- 'ppoint'
-  ret
-}
-as.pline <- function(x) {
-  UseMethod('as.pline')
-}
-as.pline.pline <- function(x) {
-  x
-}
-as.pline.default <- function(x) {
-  x <- rbind(x)
-  if(ncol(x) == 2) {
-    x <- cbind(x,1)
-  }
-  if(ncol(x) != 3) stop('rbind(x) must have 2 or 3 columns')
-  class(x) <- 'pline'
-  x
-}
-
-as.ppoint <- function(x,...) {
-  UseMethod('as.ppoint')
-}
-
-to2 <- function(x){
-  x <- rbind(x)
-  if(ncol(x) == 2) x
-  else {
-    x <- x/x[, 3]
-    x[, -3, drop=FALSE]
-  }
-}
-as.ppoint.default <- function(x) {
-  x <- rbind(x)
-  if(!(ncol(x) %in% c(2,3))) stop('rbind(x) must have 2 or 3 columns')
-  if(ncol(x) == 2) x <- cbind(x,1)
-  class(x) <- 'ppoint'
-  x
-}
-
-perp(r(1,1,0))
-perp(r(1,0,0))
-perp(r(0,0,0))
-
-perp(r(1,1,0), r(2,1))
-
-
-
-init <- function(from = -fac*c(1,1), to = fac*c(1,1), fac = 3,
-                 xlab = '', ylab = '', asp = 1) {
-  plot(rbind(from,to), type ='n', xlab = xlab, ylab = ylab, asp = asp)
-}
-init()
-# test
-
-normalize <- function(x) {
-  x <- rbind(x)
-  if(ncol(x) != 3) stop('rbind(x) must have 3 columns')
-  div <- ifelse(x[,3] == 0, 1, x[,3])
-  x/div
-}
-
-to3 <- function(x,third) {
-  x <- rbind(x)
-  if(ncol(x) == 2) x <- cbind(x,third)
-  x
-}
-to3(r(1,1), 1)
-to3(r(1,1,1))
-
-
-
-
-plot.pline <- function(x,...) {
-  bounds <- par('usr')
-  maxc <- max(abs(bounds))
-  xx <- rbind(x)
-  for(i in seq_len(nrow(xx))) {
-    x <- xx[i,,drop=FALSE]
-    disp(x)
-    lp <- perp(x) # line perp to x thru 0
-    disp(lp)
-    ponline <- dual(x,lp)
-    disp(ponline)
-    ponline %>% to2 %>% points(pch=16,...)
-    if(x[,3] != 0) { # line not through origin
-      pmid <- ponline %>% to2
-      p1 <- pmid + rev(pmid)*c(-1,1)
-      p2 <- pmid - rev(pmid)*c(-1,1)
-      p1m <- pmid + maxc * rev(pmid)*c(-1,1)
-      p2m <- pmid - maxc * rev(pmid)*c(-1,1)
-    } else {
-      p1 <- x[1,2:1]*c(-1,1)
-      p2 <- - x[1,2:1]*c(-1,1)
-      p1m <- maxc * x[1,2:1]*c(-1,1)
-      p2m <- - maxc * x[1,2:1]*c(-1,1)
-    }
-    rbind(p1,p2) %>% points(pch= 19,...)
-    rbind(p1m, p2m) %>% lines(...)
-  }
-}
-
-plot.ppoint <- function(x, ...) {
-  points(to2(x),...)
-}
-
-plot.ppoint(rbind(r(1,1,1),r(3,3,2), r(3,3,0)))
-
-r(3,3,0) %>% to2
-
-
-init();abline(v=-10:10,col='gray50',lty=2);abline(h=-10:10,col='gray50',lty=2)
-plot.pline(as.pline(r(.1,1,0)), col = 'red')
-plot.pline(r(.1,1,1), col = 'blue')
-plot.pline(as.pline(rbind(c(1,1,1),c(2,1,0), c(3,2,1))))
-# plot(as.pline(rbind(c(1,1,1),c(2,1,0), c(3,2,1))))
-plot.pline(rbind(c(1,1,1),c(2,1,0), c(3,2,1)))
-
-
-
-plot.pline(as.pline(r(0,0,1)), col = 'blue')
-plot.pline(as.pline(r(1,0,1)), col = 'blue')
-plot.pline(as.pline(r(1,1,2)), col = 'blue')
-
-
-
-
-
-plot.pline(as.pline(r(1,1,0)), col = 'red')
-plot.pline(as.pline(r(1,1,1)), col = 'blue')
-
-
-init()
-plot.pline(as.pline(r(1,-1,0)), col = 'red')
-plot.pline(as.pline(r(1,.1,0)), col = 'red')
-
-
-abline(h=0)
-abline(v=0)
-perp(r(1,1,0))
-
-plot.pline(as.pline(r(1,-1,1)), col = 'red')
-plot.pline(perp(r(1,1,1)), col = 'blue')
-
-perp(r(1,1,1))
-
-
-rbindna <- function(x, ...) {
-  if (nargs() == 0)
-    return(NULL)
-  if (nargs() == 1)
-    return(x)
-  rbind(x, NA, rbindna(...))
-}
-
-ellist <- function (center = rep(0, 2), shape = diag(2), radius = 1, n = 100,
-                    angles = (0:n) * 2 * pi/n, fac = chol)
-{
-  rbindna <- function(x, ...) {
-    if (nargs() == 0)
-      return(NULL)
-    if (nargs() == 1)
-      return(x)
-    rbind(x, NA, rbindna(...))
-  }
-  sx <- c(shape[1,1] %>% sqrt, 0)
-  disp(sx)
-  sy <- c(0, shape[2,2] %>% sqrt)
-  disp(sy)
-  yx <- c(sx[1], shape[1,2] / sqrt(shape[1,1]))
-  disp(yx)
-  xy <- c(shape[1,2] / sqrt(shape[2,2]), sy[2])
-  ry <- c(0, (shape[2,2] - shape[1,2]^2/shape[1,1]) %>% sqrt)
-  rx <- c((shape[1,1] - shape[1,2]^2/shape[2,2]) %>% sqrt, 0)
-  co <- c(sx[1],sy[2])
-
-  # if (missing(ellipse) && missing(diameters) && missing(box))
-  #   all <- TRUE
-  circle <- function(angle) cbind(cos(angle), sin(angle))
-  rect <- cbind( c(-1,-1),c(-1,1),c(1,1), c(1,-1), c(-1,-1)) * sqrt(diag(shape))
-  Tr <- fac(shape)
-  ret <- list(ellipse = t(c(center) + t(radius * circle(angles) %*% Tr)),
-              parallelogram = t(c(center) + t(radius * rbind(c(1, 1), c(-1, 1), c(-1, -1),
-                                                             c(1,-1), c(1, 1)) %*% Tr)),
-              box = t(center + (radius * rect)),
-              yx = t(center + radius * cbind(yx, -yx)),
-              xy = t(center + radius * cbind(xy, -xy)),
-              diag1 = t(center + radius * cbind(co, -co)),
-              diag2 = t(center + radius * cbind(co*c(1,-1), -co*c(1,-1))),
-              ry = t(center + radius * cbind(ry, -ry)),
-              rx = t(center + radius * cbind(rx, -rx))
-  )
-
-  # lapply(ret, dim) %>% print
-  # do.call("rbindna", ret[c(ellipse, diameters, diameters, box, rectangle)])
-  attr(ret,'ell') <- list(center = center, shape = shape)
-  ret
-}
-#'
-#' ![ell functions](ell.png)
-#'
-init()
-ellist(shape = .1*diag(2) + .9) %>% lapply(lines)
-
-setOldClass("foo")
-
-
-setGeneric("type", function(x) standardGeneric("type"))
-setMethod("type", signature("matrix"), function(x) "matrix")
-setMethod("type", signature("character"), function(x) "character")
-foo <- structure(list(x = 1), class = "foo")
-type(foo)
-
-?setOldClass
-setGeneric('plus', function(e1,e2) standardGeneric('plus'))
-setMethod("plus", signature(e1 = "foo", e2 = "ANY"), function(e1, e2) {
-  disp('S4')
-  structure(list(x = e1$x + e2), class = "foo")
-})
-setMetho
-setMethod("type", signature("foo"), function(x) "foo")
-showClass('foo')
-type(foo)
-
-plus(foo, 3)
-foo %>% plus(3)
-foo + 3
-
-showMethods('+')
 
 
 
