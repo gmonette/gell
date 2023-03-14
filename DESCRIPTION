@@ -1,12 +1,11 @@
 Package: gell
-Title: What the Package Does (One Line, Title Case)
+Title: Draw and Manipulate Ellipses
 Version: 0.0.0.9000
 Authors@R: 
-    person("First", "Last", , "first.last@example.com", role = c("aut", "cre"),
-           comment = c(ORCID = "YOUR-ORCID-ID"))
-Description: What the package does (one paragraph).
-License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
-    license
+    person("Georges", "Monette", , "georges@yorku.ca", role = c("aut", "cre"),
+           comment = c(ORCID = "0000-0003-0076-5532"))
+Description: Draw and manipulate ellipses using projective geometry.
+License: `use_gpl3_license()`
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
