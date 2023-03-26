@@ -5,19 +5,16 @@
 \title{Initialize plotting surface}
 \usage{
 init(
-  from = -fac * c(1, 1),
-  to = fac * c(1, 1),
+  xlim = fac * c(-1, 1),
+  ylim = xlim,
   fac = 3,
   xlab = "",
   ylab = "",
-  asp = 1
+  asp = 1,
+  ...
 )
 }
 \arguments{
-\item{from}{lower left corner}
-
-\item{to}{upper right corned}
-
 \item{fac}{expand c(-1,1)}
 
 \item{xlab}{x label}
@@ -25,6 +22,10 @@ init(
 \item{ylab}{y label}
 
 \item{asp}{(default: 1)}
+
+\item{from}{lower left corner}
+
+\item{to}{upper right corned}
 }
 \description{
 Initialize plotting surface

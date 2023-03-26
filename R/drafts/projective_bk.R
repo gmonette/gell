@@ -18,6 +18,15 @@
 #'
 library(spida2)
 
+# TO DO
+# 
+# Write function that take and return points or lines
+# e.g. 
+# - pairs of points to form a tangent
+# - subtending boxes
+# 
+#  
+
 TEST <- FALSE
 
 n <- function(x) {

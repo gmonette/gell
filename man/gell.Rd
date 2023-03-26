@@ -13,12 +13,12 @@ gell(x, ...)
 
 \item{center}{the center of the gell, default c(0,0), plus some combination of the following:}
 
-\item{shape}{a \eqn{2 \times 2}  matrix giving the variance corresponding to the ellipse}
+\item{shape}{a \eqn{2 \times 2} matrix giving the variance corresponding to the ellipse}
 
 \item{A}{a \eqn{2 \times 2} matrix with the transformation of the unit circle generating the shape
 of the ellipse}
 
-\item{form}{a \eqn{2 \times 2}  matrix with the matrix of the quadratic form, i.e. the inverse of \code{shape}}
+\item{form}{a \eqn{2 \times 2} matrix with the matrix of the quadratic form, i.e. the inverse of \code{shape}}
 
 \item{gamma}{an orthonormal matrix corresponding to the eigenvectors of 'shape'}
 
@@ -27,7 +27,32 @@ of the ellipse}
 \item{radius}{a factor by which to scale the ellipse as defined by other parameters}
 }
 \description{
+This is a part of a package for plotting objects
+represented in projective 2 dimensional space
+Using objects 'point' and 'line'
+
+\subsection{Generalized ellipses}{
+}
+}
+\details{
+General approach
+
 See summary and examples at end
+
+Plotting Functions:
+\itemize{
+\item \code{\link[=pl]{pl()}}  a method that plots most objects
+\item \code{\link[=text]{text()}} a method that adds text at a location
+\item \link{text} at a point
+\item \link{text(point)} at a point
+\item \link{contour.function} S3 method using \link[graphics:contour]{graphics::contour}
+}
+
+Methods:
+\itemize{
+\item fta: 'from', 'to', 'along'
+\item axes: gell, point (dir), type
+}
 
 Idea:
 \itemize{
@@ -50,7 +75,7 @@ or as n-1 lines
 \item A sequence of n lines can generate n-1 intersections
 \item Generalized ellipses, class 'gell'
 For now represented using a svd representation using
-orthogonal $\Gamma$ and singular values which may be
+orthogonal \eqn{$\Gamma$} and singular values which may be
 0 or Inf.
 \item Write plotting methods for base R and for lattice that
 plot projective points and lines and gell's. Note that lines can be
@@ -91,12 +116,12 @@ Operators:
 \item sum
 \item scalar
 }
-\item gell and
+\item \code{\link[=gell]{gell()}} and
 \itemize{
 \item point
 \itemize{
 \item scale to gell
-\item conjugate axis
+\item conjugate \code{\link[=axes]{axes()}}
 \item conjugate parallelogram
 \item subtending rectangle
 }
@@ -113,16 +138,6 @@ Operators:
 \item locus of osculation
 }
 }
-
-\subsection{Generalized ellipses}{
-}
-}
-\details{
-This is a part of a package for plotting objects
-represented in projective 2 dimensional space
-Using objects 'point' and 'line'
-
-General approach
 
 Constructor for gell objects
 }

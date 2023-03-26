@@ -4,7 +4,7 @@
 \alias{p}
 \title{Constructor for point object}
 \usage{
-p(x, ...)
+p(...)
 }
 \arguments{
 \item{x, ...}{one of the following:
@@ -18,8 +18,8 @@ if the third element is 0: a point at infinity, i.e. a direction.
 }}
 }
 \value{
-An object of class \code{line} with the structure of an n by 3 matrix where each row
-represents a line.
+An object of class \code{point} with the structure of an n by 3 matrix where each row
+represents a point.
 }
 \description{
 Points are represented by rows of n x 3 matrices where

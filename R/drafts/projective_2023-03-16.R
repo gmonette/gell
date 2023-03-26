@@ -6,20 +6,8 @@
 #' 
 #' General approach
 #' 
+#' @description
 #' See summary and examples at end
-#' 
-#' Plotting Functions:
-#' 
-#' - [pl()]  a method that plots most objects
-#' - [text()] a method that adds text at a location
-#' - [gell::text] at a point
-#' - [text(point)] at a point
-#' - [gell::contour.function] S3 method using [graphics::contour]
-#' 
-#' Methods:
-#' 
-#' - fta: 'from', 'to', 'along'
-#' - axes: gell, point (dir), type
 #' 
 #' Idea:
 #' 
@@ -40,7 +28,7 @@
 #' - A sequence of n lines can generate n-1 intersections
 #' - Generalized ellipses, class 'gell'
 #'   For now represented using a svd representation using
-#'   orthogonal \eqn{$\Gamma$} and singular values which may be
+#'   orthogonal $\Gamma$ and singular values which may be
 #'   0 or Inf. 
 #' - Write plotting methods for base R and for lattice that
 #'   plot projective points and lines and gell's. Note that lines can be
@@ -74,10 +62,10 @@
 #' - 2 or more points
 #'   - sum
 #'   - scalar
-#' - [gell()] and
+#' - gell and
 #'   - point
 #'     - scale to gell
-#'     - conjugate [axes()]
+#'     - conjugate axis
 #'     - conjugate parallelogram
 #'     - subtending rectangle
 #' - gell and
@@ -90,7 +78,6 @@
 #' @name gell
 #' @keywords internal
 "_PACKAGE"
-
 ## FUNCTIONS ####
 library(spida2)
 library(magrittr)
@@ -122,8 +109,8 @@ setOldClass('seg')
 #' @param asp (default: 1)
 #' @export       
 init <- function(xlim = fac*c(-1,1), ylim = xlim, fac = 3,
-                 xlab = '', ylab = '', asp = 1,...) {
-  plot(0,0, xlim = xlim, ylim = ylim, type ='n', xlab = xlab, ylab = ylab, asp = asp,...)
+                 xlab = '', ylab = '', asp = 1) {
+  plot(0,0, xlim = xlim, ylim = ylim, type ='n', xlab = xlab, ylab = ylab, asp = asp)
   abline(h=0, col = "#44444422")
   abline(v=0, col = "#44444422")
 }
@@ -518,7 +505,7 @@ setOldClass('point')
 #' @examples
 #' join(p(c(1,1),c(1,-1)), p(c(2,2)))
 #' join(
-#'   p(1,1,0),  # point at infinity)
+#'   p(c(1,1,0)),  # point at infinity)
 #'   p(c(1,2))
 #' )
 #' join(p(c(1,1,1)), p(c(1,1,1))) %>% join(l(c(1,-1,0))) %>% join(p(c(1,1,1)))
@@ -1167,10 +1154,10 @@ inter_gell_line <- function(ge, line) {
 #' 
 #' @param x an object of class ell to be transformed to a gell, or
 #' @param center the center of the gell, default c(0,0), plus some combination of the following:
-#' @param shape a \eqn{2 \times 2} matrix giving the variance corresponding to the ellipse
+#' @param shape a \eqn{2 \times 2}  matrix giving the variance corresponding to the ellipse
 #' @param A a \eqn{2 \times 2} matrix with the transformation of the unit circle generating the shape
 #'        of the ellipse
-#' @param form a \eqn{2 \times 2} matrix with the matrix of the quadratic form, i.e. the inverse of `shape`
+#' @param form a \eqn{2 \times 2}  matrix with the matrix of the quadratic form, i.e. the inverse of `shape`
 #' @param gamma an orthonormal matrix corresponding to the eigenvectors of 'shape'
 #' @param d the eigenvalues of 'shape'
 #' @param radius a factor by which to scale the ellipse as defined by other parameters 
@@ -1682,37 +1669,7 @@ inter_gell_seg <- function(ge, sg) {
 
 #' @export
 disp <- spida2::disp
-#'
-#' Plot contour lines for a function
-#' 
-#' Uses [graphics::contour] to draw contour lines
-#' 
-#' @export 
-contour.function <- function(fun, val = 0, 
-            xlim = expand(par('usr')[1:2],fac),
-            ylim = expand(par('usr')[3:4],fac),
-            fac = 1.1, n = 200) {
-  cont <- function(x,y,fun, ..., nlevels = 50, levels=NULL) {
-    ret <- as.matrix(expand.grid(x,y)) 
-    # print(head(ret))
-    ret <- apply(ret, 1, function(v) fun(v[1],v[2],...))
-    ret <- matrix(ret, nrow = length(x), ncol = length(y))
-    # print(dim(ret))
-    if(is.null(levels)) {
-      contour(x,y,ret, nlevels = nlevels)
-      
-    } else {
-      contour(x,y,ret, levels = levels)
-    }
-  }
-  expand <- function(v, fac) {
-    cen <- mean(v)
-    cen + fac*(v - cen)
-  }
-  x <- seq(xlim[1], xlim[2], length.out = n)
-  y <- seq(ylim[1], ylim[2], length.out = n)
-  cont(x, y, fun, levels = val)
-}
+
 
 #' @export
 inter_fun <- function(fun, val = 0, 
@@ -1762,14 +1719,10 @@ pl.contour_list <- function(cl,...) {
   )
   invisible(cl)
 }
-#' Intersecting ellipses
-#' 
-#' Normally called from S4 method [inter]
-#' 
-#' @param g1 gell object
-#' @param g2 gell object
-#' @param n fineness of grid to compute intersections
-#' @param verbose default: 0
+
+
+
+
 #' @export
 inter_gells <- function(g1, g2, n = 1000, verbose = 0) {
   # intersection points of two ellipses
@@ -1833,18 +1786,11 @@ inter_gells <- function(g1, g2, n = 1000, verbose = 0) {
   }
   ret
 }
-#' Generate the intersection of two objects
-#' 
-#' @param x gell or function
-#' @param y gell, line, segment, point or numeric
-#' @param option fineness of grid over which to find intersections, default: 
-#' 
-#' @returns intersecting point(s)
+
 #' @export
 setGeneric('inter', function(x, y, option,...) standardGeneric('inter'))
 
 ## inter: gell gell missing ####
-#' @describeIn inter intersection of two `gell` objects using [inter_gells]
 #' @export
 setMethod("inter", signature(x = 'gell', y = 'gell', option = 'missing'),
           function(x, y, option, ...)  {
@@ -1853,7 +1799,6 @@ setMethod("inter", signature(x = 'gell', y = 'gell', option = 'missing'),
 )
 
 ## inter: gell gell numeric ####
-#' @describeIn inter intersection of two `gell` objects
 #' @export
 setMethod("inter", signature(x = 'gell', y = 'gell', option = 'numeric'),
           function(x, y, option, ...)  {
@@ -1862,7 +1807,6 @@ setMethod("inter", signature(x = 'gell', y = 'gell', option = 'numeric'),
 )
 
 ## inter: gell line missing ####
-#' @describeIn inter intersection a `gell` object with a `line`
 #' @export
 setMethod("inter", signature(x = 'gell', y = 'line', option = 'missing'),
           function(x, y, option, ...)  {
@@ -1871,7 +1815,6 @@ setMethod("inter", signature(x = 'gell', y = 'line', option = 'missing'),
 )
 
 ## inter: gell seg missing ####
-#' @describeIn inter intersection a `gell` object with a `seg` object (segment)
 #' @export
 setMethod("inter", signature(x = 'gell', y = 'seg', option = 'missing'),
           function(x, y, option, ...)  {
@@ -1880,7 +1823,6 @@ setMethod("inter", signature(x = 'gell', y = 'seg', option = 'missing'),
 )
 
 ## inter: gell point missing ####
-#' @describeIn inter intersection a `gell` object with a `point`
 #' @export
 setMethod("inter", signature(x = 'gell', y = 'point', option = 'missing'),
           function(x, y, option, ...)  {
@@ -1889,7 +1831,6 @@ setMethod("inter", signature(x = 'gell', y = 'point', option = 'missing'),
 )
 
 ## inter: function numeric ####
-#' @describeIn inter intersection a `function` object with a numeric value(s)
 #' @export
 setMethod("inter", signature(x = 'function', y = 'numeric', option = 'missing'),
           function(x, y, option, ...)  {
@@ -2402,9 +2343,10 @@ if(COND) {
   axes(ge,p(1,0,0),'l', tan = F) %>% pl
   
   {
+    lab <- latex2exp::TeX
     # Drawing the canonical confidence ellipse
     # 
-    init()
+    init(ylim =c(-1,5))
     abline(h=0,col=lightgray)
     abline(v=0,col=lightgray)
     gell(shape = diag(c(1.2,1))%*%rmat(-.8)%*%diag(c(1.2,1)), center = c(-.8,2.5)) %>% pl -> ge
@@ -2428,7 +2370,7 @@ if(COND) {
   {
     # Drawing the acceptance ellipse and Simpson's Paradox
     # 
-    inity()
+    init()
     cex <-1.8
     abline(h=0,col=lightgray)
     abline(v=0,col=lightgray)
