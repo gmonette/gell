@@ -10,8 +10,27 @@
   xlim = expand(par("usr")[1:2], fac),
   ylim = expand(par("usr")[3:4], fac),
   fac = 1.1,
-  n = 200
+  n = 200,
+  ...
 )
+}
+\arguments{
+\item{val}{numerical values defining contour lines of functions, default: 0}
+
+\item{xlim}{}
+
+\item{ylim}{}
+
+\item{fac}{factor by which to expand \code{par("usr")} to create grid}
+
+\item{n}{resolution of grid to define contours, default: 200}
+
+\item{...}{arguments passed to plotting function, e.g. col, lty, ...}
+
+\item{function}{of two arguments}
+}
+\value{
+adds contour lines to existing plot
 }
 \description{
 Uses \link[graphics:contour]{graphics::contour} to draw contour lines

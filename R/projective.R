@@ -1687,33 +1687,37 @@ disp <- spida2::disp
 #' 
 #' Uses [graphics::contour] to draw contour lines
 #' 
+#' @param function of two arguments
+#' @param val numerical values defining contour lines of functions, default: 0
+#' @param xlim 
+#' @param ylim 
+#' @param fac factor by which to expand `par("usr")` to create grid
+#' @param n resolution of grid to define contours, default: 200
+#' @param ... arguments passed to plotting function, e.g. col, lty, ... 
+#' @returns adds contour lines to existing plot
+#' 
 #' @export 
-contour.function <- function(fun, val = 0, 
-            xlim = expand(par('usr')[1:2],fac),
-            ylim = expand(par('usr')[3:4],fac),
-            fac = 1.1, n = 200) {
-  cont <- function(x,y,fun, ..., nlevels = 50, levels=NULL) {
-    ret <- as.matrix(expand.grid(x,y)) 
-    # print(head(ret))
-    ret <- apply(ret, 1, function(v) fun(v[1],v[2],...))
+contour.function <- function(fun, val = 0, xlim = expand(par("usr")[1:2], fac), 
+                             ylim = expand(par("usr")[3:4], fac), fac = 1.1, n = 200, ...) {
+  cont <- function(x, y, fun, ..., nlevels = 50, levels = NULL) {
+    ret <- as.matrix(expand.grid(x, y))
+    ret <- apply(ret, 1, function(v) fun(v[1], v[2]))
     ret <- matrix(ret, nrow = length(x), ncol = length(y))
-    # print(dim(ret))
-    if(is.null(levels)) {
-      contour(x,y,ret, nlevels = nlevels)
-      
-    } else {
-      contour(x,y,ret, levels = levels)
+    if (is.null(levels)) {
+      graphics:::contour.default(x, y, ret, nlevels = nlevels, add = TRUE, ...)
+    }
+    else {
+      graphics:::contour.default(x, y, ret, levels = levels, add = TRUE, ...)
     }
   }
   expand <- function(v, fac) {
     cen <- mean(v)
-    cen + fac*(v - cen)
+    cen + fac * (v - cen)
   }
   x <- seq(xlim[1], xlim[2], length.out = n)
   y <- seq(ylim[1], ylim[2], length.out = n)
-  cont(x, y, fun, levels = val)
+  cont(x, y, fun, levels = val, ...)
 }
-
 #' @export
 inter_fun <- function(fun, val = 0, 
                       xlim = expand(par('usr')[1:2],fac),
