@@ -1688,7 +1688,7 @@ disp <- spida2::disp
 #' Uses [graphics::contour] to draw contour lines
 #' 
 #' @param function of two arguments
-#' @param val numerical values defining contour lines of functions, default: 0
+#' @param val numerical values defining contour lines of functions, default: NULL
 #' @param xlim 
 #' @param ylim 
 #' @param fac factor by which to expand `par("usr")` to create grid
@@ -1697,7 +1697,7 @@ disp <- spida2::disp
 #' @returns adds contour lines to existing plot
 #' 
 #' @export 
-contour.function <- function(fun, val = 0, xlim = expand(par("usr")[1:2], fac), 
+contour_function <- function(fun, val = NULL, xlim = expand(par("usr")[1:2], fac), 
                              ylim = expand(par("usr")[3:4], fac), fac = 1.1, n = 200, ...) {
   cont <- function(x, y, fun, ..., nlevels = 50, levels = NULL) {
     ret <- as.matrix(expand.grid(x, y))
@@ -1718,6 +1718,9 @@ contour.function <- function(fun, val = 0, xlim = expand(par("usr")[1:2], fac),
   y <- seq(ylim[1], ylim[2], length.out = n)
   cont(x, y, fun, levels = val, ...)
 }
+#' @describeIn contour_function method for functions for contour generic function
+#' @export
+contour.function <- contour_function
 #' @export
 inter_fun <- function(fun, val = 0, 
                       xlim = expand(par('usr')[1:2],fac),
