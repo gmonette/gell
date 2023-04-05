@@ -1655,25 +1655,25 @@ inter_gell_seg <- function(ge, sg) {
   # %>% HIGHLY %>% BROKEN
   # maybe we won't need this is including circle includes all finite points
   # because we can then use axes to find intersection from interior to infinite point
-  if(nrow(sg) == 1) sg <- seg(rbind(center(ge), sg))
+  if(nrow(sg) == 1) sg <- seg(rbind(cen(ge), sg))
   if(nrow(sg) >2) warning('only first two rows of sg are used')
   li <- join(p(sg[1,]), p(sg[2,])) # assuming distinct
   ps <- inter_gell_line(ge, li)        # intersection with line joining two points
-  ps <- p(rbind(sg,ps[[1]], ps[[2]]))  # combine
-  ps <- plus(ps, mult(p(ps[3,]), -1))  # center on one   to find order
-  
-  pt2 <- ps[2,1:2]                       
-  mat <- rbind( c(pt2), c(-pt2[2],pt2[1]))/(sum(pt2^2))
-  mat <- rbind( cbind(mat,0), c(0,0,1))
-  ps <- mult(mat, ps)  # TEST on set including pt at infty ##########################
-  
-  line <- line %>% plus(mult(-1,center(ge)))
-  line <- line %>% mult(diag(1/ge$d)%*%t(ge$gamma))
-  ps <- inter_circle_line(line)
-  ps <- lapply(ps, function(pt) {
-    mult(ge$gamma %*% diag(ge$d), pt) %>% plus(center(ge))
-  })
-  ps
+  # ps <- p(rbind(sg,ps[[1]], ps[[2]]))  # combine
+  # ps <- plus(ps, mult(p(ps[3,]), -1))  # center on one   to find order
+  # 
+  # pt2 <- ps[2,1:2]                       
+  # mat <- rbind( c(pt2), c(-pt2[2],pt2[1]))/(sum(pt2^2))
+  # mat <- rbind( cbind(mat,0), c(0,0,1))
+  # ps <- mult(mat, ps)  # TEST on set including pt at infty ##########################
+  # 
+  # line <- line %>% plus(mult(-1,center(ge)))
+  # line <- line %>% mult(diag(1/ge$d)%*%t(ge$gamma))
+  # ps <- inter_circle_line(line)
+  # ps <- lapply(ps, function(pt) {
+  #   mult(ge$gamma %*% diag(ge$d), pt) %>% plus(center(ge))
+  # })
+  p(do.call(rbind,ps))
 } 
 
 #' 
