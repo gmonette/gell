@@ -142,7 +142,7 @@ Operators:
 Constructor for gell objects
 }
 \author{
-\strong{Maintainer}: Georges Monette \email{georges@yorku.ca} (\href{https://orcid.org/0000-0003-0076-5532}{ORCID})
+\strong{Maintainer}: Georges Monette \email{georges@yorku.ca}
 
 }
 \keyword{internal}

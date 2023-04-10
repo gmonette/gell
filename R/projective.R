@@ -710,7 +710,7 @@ setGeneric('plus', function(x,y,...) standardGeneric('plus') )
 #' @export
 setGeneric('mult', function(x, y, ...) standardGeneric('mult') )
 #'
-#' @describeIn mult multiply line by a scalar
+#' @describeIn plus multiply line by a scalar
 #' @export
 setMethod('mult', signature('line','numeric'),
           function(x, y, ...) {
@@ -720,7 +720,7 @@ setMethod('mult', signature('line','numeric'),
 )
 #' @details
 #' matrix operates on the left on points in line as a column vector
-#' @describeIn mult matrix operates on line as if multiplying the points in the line on the left 
+#' @describeIn plus matrix operates on line as if multiplying the points in the line on the left 
 #' @export
 setMethod('mult', signature('line','matrix'),
           function(x, y, ...) {
@@ -731,6 +731,7 @@ setMethod('mult', signature('line','matrix'),
             l(x %*% A)
           } 
 )
+#' @describeIn plus matrix operates on line as if multiplying the points in the line on the left 
 #' @export
 setMethod('mult', signature('matrix','point'),
           function(x, y, ...) {
@@ -1901,6 +1902,24 @@ setMethod("inter", signature(x = 'gell', y = 'point', option = 'missing'),
 setMethod("inter", signature(x = 'function', y = 'numeric', option = 'missing'),
           function(x, y, option, ...)  {
             inter_fun(x, y,...)
+          }
+)
+
+## inter: line line ####
+#' @describeIn inter intersection of two `line` objects
+#' @export
+setMethod("inter", signature(x = 'line', y = 'line', option = 'missing'),
+          function(x, y, option, ...)  {
+            join(x, y)
+          }
+)
+
+## inter: point point ####
+#' @describeIn inter intersection of two `point` objects, i.e. the 'join' of two points
+#' @export
+setMethod("inter", signature(x = 'point', y = 'point', option = 'missing'),
+          function(x, y, option, ...)  {
+            join(x, y)
           }
 )
 

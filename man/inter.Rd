@@ -8,6 +8,8 @@
 \alias{inter,gell,seg,missing-method}
 \alias{inter,gell,point,missing-method}
 \alias{inter,function,numeric,missing-method}
+\alias{inter,line,line,missing-method}
+\alias{inter,point,point,missing-method}
 \title{Generate the intersection of two objects}
 \usage{
 inter(x, y, option, ...)
@@ -23,6 +25,10 @@ inter(x, y, option, ...)
 \S4method{inter}{gell,point,missing}(x, y, option, ...)
 
 \S4method{inter}{`function`,numeric,missing}(x, y, option, ...)
+
+\S4method{inter}{line,line,missing}(x, y, option, ...)
+
+\S4method{inter}{point,point,missing}(x, y, option, ...)
 }
 \arguments{
 \item{x}{gell or function}
@@ -50,5 +56,9 @@ Generate the intersection of two objects
 \item \code{inter(x = gell, y = point, option = missing)}: intersection a \code{gell} object with a \code{point}
 
 \item \code{inter(x = `function`, y = numeric, option = missing)}: intersection a \code{function} object with a numeric value(s)
+
+\item \code{inter(x = line, y = line, option = missing)}: intersection of two \code{line} objects
+
+\item \code{inter(x = point, y = point, option = missing)}: intersection of two \code{point} objects, i.e. the 'join' of two points
 
 }}
